@@ -2,12 +2,12 @@
 
 namespace Spatie\FlysystemDropbox;
 
-use Spatie\Dropbox\Client;
-use League\Flysystem\Config;
-use League\Flysystem\Util\MimeType;
-use Spatie\Dropbox\Exceptions\BadRequest;
 use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
+use League\Flysystem\Config;
+use League\Flysystem\Util\MimeType;
+use Spatie\Dropbox\Client;
+use Spatie\Dropbox\Exceptions\BadRequest;
 
 class DropboxAdapter extends AbstractAdapter
 {
@@ -262,7 +262,7 @@ class DropboxAdapter extends AbstractAdapter
 
     public function createSharedLinkWithSettings($path, $settings)
     {
-        return $this->createSharedLinkWithSettings($path, $settings);
+        return $this->client->createSharedLinkWithSettings($path, $settings);
     }
 
     /**
