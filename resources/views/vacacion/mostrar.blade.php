@@ -19,7 +19,7 @@
             <hr>
           <ol>
             @foreach ($vacaciones as $vacacion)
-                <li> {{ f_formato_d_m_Y($vacacion->inicio)}} - {{ f_formato_d_m_Y($vacacion->fin)}}</li>
+                <li> <b>Desde: </b> {{ f_formato_d_m_Y($vacacion->inicio)}} - <b>Hasta: </b> {{ f_formato_d_m_Y($vacacion->fin)}} - <b>Dias tomados:</b> {{$vacacion->dias_tomados}}</li>
             @endforeach
           </ol>
       </ol>
