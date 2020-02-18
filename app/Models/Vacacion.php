@@ -22,9 +22,9 @@ class Vacacion extends Model
 
     public static function disponibilidadPorGestion($fecha_vacacion, $persona_id){
         $gestiones_por_persona = self::gestionesPorPersona($persona_id);
-        
+
         $saldo = -1;
-        
+
         foreach ($gestiones_por_persona as $key => $value) {
             # code...
             if ($fecha_vacacion >= $value['fecha_inicio'] && $fecha_vacacion < $value['fecha_fin']) {
@@ -34,7 +34,7 @@ class Vacacion extends Model
         }
         return $saldo;
     }
-   
+
     public static function gestionesPorPersona($persona_id)
     {
         # code...
@@ -46,20 +46,20 @@ class Vacacion extends Model
         $n_gestiones = $fecha_ingreso->diffInDays($fecha_actual);
         $n_gestiones = intval($n_gestiones/365);
 
-       
+
         if ($n_gestiones > 0) {
             # code...
             $data = [];
             $fechas_excluidas = [];
-            
+
             for ($i=0; $i < $n_gestiones; $i++) {
-            
+
                 //Obteniendo fechas de inicio y fin de cada gestion
                 $fecha = $fecha_ingreso->toDateTimeString();
-                $fecha_inicio = strtotime('+'.($i+1).' year', strtotime($fecha));
+                $fecha_inicio = strtotime('+'.($i).' year', strtotime($fecha));
                 $fecha_inicio = date('Y-m-d', $fecha_inicio);
 
-                $fecha_fin = strtotime('+'.($i+2).' year', strtotime($fecha));
+                $fecha_fin = strtotime('+'.($i+1).' year', strtotime($fecha));
                 $fecha_fin = date('Y-m-d', $fecha_fin);
 
                 if ($fecha_fin <= date('Y-m-d')) {
@@ -71,17 +71,17 @@ class Vacacion extends Model
 
                 $dias_vacacion = self::escala($a, $m, $d);
                 $dias_tomados_gestion = self::sumaVacacionesTomadasGestion($fecha_inicio, $fecha_fin, $persona_id);
-                
+
                 // $vacaciones = Vacacion::getVacaciones($persona_id, $dias_vacacion, $fechas_excluidas);
                 $vacaciones = [];
-                
+
                 if (count($vacaciones) > 0) {
                     $fechas_excluidas = $vacaciones->pluck('id');
                 } else {
                     $fechas_excluidas = [];
 
                 }
-                
+
                 $data[$i] = [
                             'gestion' => $i+1,
                             'fecha_inicio' => $fecha_inicio,
@@ -98,7 +98,7 @@ class Vacacion extends Model
             $data = [];
         }
         // return $data;
-        return collect($data); 
+        return collect($data);
     }
 
     public static function vacacionesPorPersona($persona_id)
@@ -107,8 +107,9 @@ class Vacacion extends Model
         ->join('tiempo', 'vacaciones.tiempo_id', 'tiempo.id')
         ->where('persona_id', $persona_id)
         ->select('vacaciones.id', 'persona_id', 'inicio', 'fin', 'dias_tomados',
-        'tiempo_id'
+        'tiempo_id', 'tiempo.descripcion as tiempo_descripcion'
         )
+        ->orderBy('vacaciones.inicio')
         ->get();
         return $fechas_dia;
     }
@@ -200,18 +201,42 @@ class Vacacion extends Model
         }
     }
 
-    public static function setDiasTomados($inicio, $fin){
+    public static function setDiasTomados($inicio, $fin, $tiempo){
+
+        $total_dias = 0;
+
+        $feriados = \DB::table('feriados')
+        ->where('fecha', '>=', $inicio)
+        ->where('fecha', '<=', $fin)
+        ->get();
+
+        $feriado_domingo = 0;
+        foreach ($feriados as $key => $value) {
+            $feriado_domingo = $feriado_domingo + self::domingos($value->fecha, $value->fecha);
+        }
+
+        $total_feriados = count($feriados) - $feriado_domingo;
+
+        $tiempo = Tiempo::find($tiempo)->valor;
         $dias = Carbon::parse($inicio)->diffInDays(Carbon::parse($fin));
+
+        $domingos = self::domingos($inicio, $fin);
+        $total_dias = (($dias + 1) - $domingos - $total_feriados);
+        return $total_dias * $tiempo;
+    }
+
+    public static function domingos ($inicio, $fin){
         // $domingos = [];
         $domingos = 0;
-        $startDate = Carbon::parse($inicio)->next(Carbon::SATURDAY); // Obteniendo el primer Domingo.
+        $inicio = Carbon::parse($inicio)->subDay(1);
+        $startDate = $inicio->next(Carbon::SUNDAY); // Obteniendo el primer Domingo.
         $endDate = Carbon::parse($fin);
 
         for ($date = $startDate; $date->lte($endDate); $date->addWeek()) {
             // $domingos[] = $date->format('Y-m-d');
             $domingos = $domingos + 1;
         }
-        return ($dias + 1) - $domingos;
+        return $domingos;
     }
 
     public static function escala ($a, $m, $d){

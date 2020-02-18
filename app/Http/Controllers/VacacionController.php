@@ -45,25 +45,25 @@ class VacacionController extends Controller
      */
     public function guardar(ValidacionVacacion $request)
     {
-        
+
         if ($inicio = Vacacion::setFechaVacacion($request->inicio))
         $request->request->add(['inicio' => $inicio]);
 
         if ($fin = Vacacion::setFechaVacacion($request->fin))
         $request->request->add(['fin' => $fin]);
 
-        if ($dias_tomados = Vacacion::setDiasTomados($request->inicio, $request->fin))
+        if ($dias_tomados = Vacacion::setDiasTomados($request->inicio, $request->fin, $request->tiempo_id))
         $request->request->add(['dias_tomados' => $dias_tomados]);
 
         // $disponibilidad_por_dia = Vacacion::disponibilidadPorDia($fecha_vacacion, $request->persona_id);
-        
+
         // $disponibilidad_por_gestion = Vacacion::disponibilidadPorGestion($fecha_vacacion, $request->persona_id);
-       
+
 
         // return $disponibilidad_por_gestion;
         // echo "<pre>";
         // return print_r($disponibilidad_por_gestion);
-        
+
         //Disponibilidad por Gestion
         // $saldo = Vacacion::disponibilidadPorGestion($fecha_vacacion, $request->persona_id);
 
@@ -73,7 +73,7 @@ class VacacionController extends Controller
             $vacacion = Vacacion::create($request->all());
         return redirect('vacacion/crear/'.$request->persona_id)->with('mensaje', 'Fecha agregada con exito');
         }else {
-            return redirect('vacacion/crear/'.$request->persona_id)->withErrors(['error' => 'Vacaciones disponibles para esa Gestion: '.$saldo.' día(s)' ]);
+            return redirect('vacacion/crear/'.$request->persona_id)->withErrors(['error' => 'Vacaciones disponibles para esa Gestion: '.$disponibilidad_por_persona->sum('saldo').' día(s)' ]);
         }
     }
 

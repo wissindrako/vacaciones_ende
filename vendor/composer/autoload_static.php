@@ -5005,6 +5005,7 @@ class ComposerStaticInitb57489ee94383dada527509ba33a866d
         'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/..' . '/symfony/polyfill-php72/Php72.php',
         'Symfony\\Polyfill\\Php73\\Php73' => __DIR__ . '/..' . '/symfony/polyfill-php73/Php73.php',
+        'TablaFeriadoSeeder' => __DIR__ . '/../..' . '/database/seeds/TablaFeriadoSeeder.php',
         'TablaPermisoSeeder' => __DIR__ . '/../..' . '/database/seeds/TablaPermisoSeeder.php',
         'TablaRolSeeder' => __DIR__ . '/../..' . '/database/seeds/TablaRolSeeder.php',
         'Tests\\CreatesApplication' => __DIR__ . '/../..' . '/tests/CreatesApplication.php',

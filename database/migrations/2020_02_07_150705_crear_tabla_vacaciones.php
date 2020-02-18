@@ -19,7 +19,7 @@ class CrearTablaVacaciones extends Migration
             $table->foreign('persona_id', 'fk_vacaciones_persona')->references('id')->on('personas')->onDelete('cascade')->onUpdate('restrict');
             $table->date('inicio');
             $table->date('fin');
-            $table->unsignedInteger('dias_tomados');
+            $table->double('dias_tomados', 4, 2)->default(0.0);
             $table->unsignedInteger('tiempo_id');
             $table->foreign('tiempo_id', 'fk_vacaciones_tiempo')->references('id')->on('tiempo')->onDelete('cascade')->onUpdate('restrict');
             $table->timestamps();

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TablaPermisoSeeder::class);
         $this->call(UsuarioAdministradorSeeder::class);
         $this->call(TiempoVacacionSeeder::class);
+        $this->call(TablaFeriadoSeeder::class);
     }
 
     protected function truncateTablas(array $tablas)

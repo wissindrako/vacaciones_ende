@@ -4539,6 +4539,7 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\Mbstring' => $vendorDir . '/symfony/polyfill-mbstring/Mbstring.php',
     'Symfony\\Polyfill\\Php72\\Php72' => $vendorDir . '/symfony/polyfill-php72/Php72.php',
     'Symfony\\Polyfill\\Php73\\Php73' => $vendorDir . '/symfony/polyfill-php73/Php73.php',
+    'TablaFeriadoSeeder' => $baseDir . '/database/seeds/TablaFeriadoSeeder.php',
     'TablaPermisoSeeder' => $baseDir . '/database/seeds/TablaPermisoSeeder.php',
     'TablaRolSeeder' => $baseDir . '/database/seeds/TablaRolSeeder.php',
     'Tests\\CreatesApplication' => $baseDir . '/tests/CreatesApplication.php',
