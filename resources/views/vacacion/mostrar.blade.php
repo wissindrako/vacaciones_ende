@@ -60,7 +60,7 @@
         <!-- /.box-body -->
       </div>
 
-</div>
+
 
     <!-- /.row -->
     <div class="row">
@@ -124,3 +124,4 @@
             <!-- /.box -->
         </div>
         </div>
+    </div>
