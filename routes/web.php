@@ -20,28 +20,31 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
-Route::get('/', 'InicioController@index')->name('inicio');
+// Route::get('/', 'InicioController@index')->name('inicio');
+Route::get('/', function () {
+    return redirect('persona');
+})->name('inicio');
 Route::get('seguridad/login', 'Seguridad\LoginController@index')->name('login');
 Route::post('seguridad/login', 'Seguridad\LoginController@login')->name('login_post');
 Route::get('seguridad/logout', 'Seguridad\LoginController@logout')->name('logout');
 Route::post('ajax-sesion', 'AjaxController@setSession')->name('ajax')->middleware('auth');
 
 /*RUTAS DE PERSONA*/
-Route::get('persona', 'PersonaController@index')->name('persona');
-Route::get('persona/crear', 'PersonaController@crear')->name('crear_persona');
-Route::post('persona', 'PersonaController@guardar')->name('guardar_persona');
-Route::post('persona/{id_persona}', 'PersonaController@mostrar')->name('ver_vacaciones');
-Route::get('persona/{id}/editar', 'PersonaController@editar')->name('editar_persona');
-Route::put('persona/{id}', 'PersonaController@actualizar')->name('actualizar_persona');
-Route::delete('persona/{id}', 'PersonaController@eliminar')->name('eliminar_persona');
+Route::get('persona', 'PersonaController@index')->name('persona')->middleware('auth');
+Route::get('persona/crear', 'PersonaController@crear')->name('crear_persona')->middleware('auth');
+Route::post('persona', 'PersonaController@guardar')->name('guardar_persona')->middleware('auth');
+Route::post('persona/{id_persona}', 'PersonaController@mostrar')->name('ver_vacaciones')->middleware('auth');
+Route::get('persona/{id}/editar', 'PersonaController@editar')->name('editar_persona')->middleware('auth');
+Route::put('persona/{id}', 'PersonaController@actualizar')->name('actualizar_persona')->middleware('auth');
+Route::delete('persona/{id}', 'PersonaController@eliminar')->name('eliminar_persona')->middleware('auth');
 
 /*RUTAS DE VACACION*/
-Route::get('vacacion', 'VacacionController@index')->name('vacacion');
-Route::get('vacacion/crear/{id_persona}', 'VacacionController@crear')->name('crear_vacacion');
-Route::post('vacacion', 'VacacionController@guardar')->name('guardar_vacacion');
-Route::get('vacacion/{id}/editar', 'VacacionController@editar')->name('editar_vacacion');
-Route::put('vacacion/{id}', 'VacacionController@actualizar')->name('actualizar_vacacion');
-Route::delete('vacacion/{id}', 'VacacionController@eliminar')->name('eliminar_vacacion');
+Route::get('vacacion', 'VacacionController@index')->name('vacacion')->middleware('auth');
+Route::get('vacacion/crear/{id_persona}', 'VacacionController@crear')->name('crear_vacacion')->middleware('auth');
+Route::post('vacacion', 'VacacionController@guardar')->name('guardar_vacacion')->middleware('auth');
+Route::get('vacacion/{id}/editar', 'VacacionController@editar')->name('editar_vacacion')->middleware('auth');
+Route::put('vacacion/{id}', 'VacacionController@actualizar')->name('actualizar_vacacion')->middleware('auth');
+Route::delete('vacacion/{id}', 'VacacionController@eliminar')->name('eliminar_vacacion')->middleware('auth');
 
 /*RUTAS CON EL MIDDLEWARE ADMIN*/
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'superadmin']], function () {

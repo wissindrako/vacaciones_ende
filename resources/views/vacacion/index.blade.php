@@ -48,12 +48,13 @@ Vacación
                             <td>{{$data->haber_basico}}</td> --}}
                             <td>{{$data->fecha_ingreso}}</td>
                             @php
-                                $vacaciones = App\Models\Vacacion::gestionesPorPersona($data->id);
+                                $gestiones = App\Models\Vacacion::gestionesPorPersona($data->id);
+                                $vacaciones = App\Models\Vacacion::vacacionesPorPersona($data->id);
                             @endphp
-                            <td>{{ $vacaciones->sum('dias_vacacion') }}</td>
+                            <td>{{ $gestiones->sum('dias_vacacion') }}</td>
                             <td>{{ $vacaciones->sum('dias_tomados') }}</td>
-                            <td>{{ $vacaciones->sum('saldo') }}</td>
-                            <td><a href="{{route('ver_libro', $data)}}" class="ver-libro">{{$data->titulo}}</a></td>
+                            <td>{{ $gestiones->sum('dias_vacacion') - $vacaciones->sum('dias_tomados')}}</td>
+                            {{-- <td><a href="{{route('ver_libro', $data)}}" class="ver-libro">{{$data->titulo}}</a></td> --}}
                             {{-- <td>
                                 @foreach ($data->roles as $rol)
                                     {{$loop->last ? $rol->nombre : $rol->nombre . ', '}}

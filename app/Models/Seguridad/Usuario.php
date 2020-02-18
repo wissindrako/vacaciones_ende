@@ -39,6 +39,15 @@ class Usuario extends Authenticatable
         }
     }
 
+    public static function setPassword($password)
+    {
+        if ($password) {
+            return bcrypt($password);
+        } else {
+            return false;
+        }
+    }
+
     /* public function setPasswordAttribute($pass)
     {
         $this->attributes['password'] = Hash::make($pass);

@@ -43,6 +43,8 @@ class UsuarioController extends Controller
     public function actualizar(ValidacionUsuario $request, $id)
     {
         $usuario = Usuario::findOrFail($id);
+        if ($password = Usuario::setPassword($request->password))
+        $request->request->add(['password' => $password]);
         $usuario->update(array_filter($request->all()));
         $usuario->roles()->sync($request->rol_id);
         return redirect('admin/usuario')->with('mensaje', 'Usuario actualizado con exito');
